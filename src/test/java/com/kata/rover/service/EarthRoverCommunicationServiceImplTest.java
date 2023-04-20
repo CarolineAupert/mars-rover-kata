@@ -139,9 +139,9 @@ public class EarthRoverCommunicationServiceImplTest {
 
 		List<Command> expectedCommands = Arrays.asList(Command.F, Command.F, Command.B, Command.L, Command.R);
 
-		List<Command> commands = comServiceToTest.getCommands();
+		List<Command> commands = comServiceToTest.askForCommands();
 
-		assertEquals(expectedCommands, commands);
+		assertEquals(expectedCommands, commands, "Commands should be equal");
 	}
 
 	/**
@@ -153,9 +153,9 @@ public class EarthRoverCommunicationServiceImplTest {
 
 		List<Command> expectedCommands = Arrays.asList(Command.F, Command.F, Command.L, Command.R);
 
-		List<Command> commands = comServiceToTest.getCommands();
+		List<Command> commands = comServiceToTest.askForCommands();
 
-		assertEquals(expectedCommands, commands);
+		assertEquals(expectedCommands, commands, "Commands should be equal");
 	}
 
 }

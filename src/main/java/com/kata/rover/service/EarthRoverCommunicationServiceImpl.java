@@ -37,11 +37,17 @@ public class EarthRoverCommunicationServiceImpl implements EarthRoverCommunicati
 	 * 
 	 * @return The commands
 	 */
-	public List<Command> getCommands() {
-		System.out.println("Enter commands (f b l r) :");
+	public List<Command> askForCommands() {
+		System.out.println("Enter commands (f b l r) or exit :");
 		String stringCommands = getScanner().next();
-
-		return convertCommands(stringCommands);
+		
+		String cleanStringCommands = StringUtils.deleteWhitespace(stringCommands).toUpperCase();
+	
+		if(StringUtils.isEmpty(cleanStringCommands) || cleanStringCommands.equals("EXIT")) {
+			return null;
+		} else {
+			return convertCommands(stringCommands);
+		}
 	}
 
 	/**

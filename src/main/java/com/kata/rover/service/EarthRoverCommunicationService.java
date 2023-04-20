@@ -18,7 +18,7 @@ public interface EarthRoverCommunicationService {
 	 * 
 	 * @return The commands.
 	 */
-	public List<Command> getCommands();
+	public List<Command> askForCommands();
 
 	/**
 	 * Initializes the Rover position.
