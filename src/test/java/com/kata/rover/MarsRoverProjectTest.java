@@ -1,6 +1,5 @@
 package com.kata.rover;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -16,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.kata.rover.exception.ObstacleException;
 import com.kata.rover.model.Command;
 import com.kata.rover.model.Direction;
 import com.kata.rover.model.Rover;
@@ -30,19 +30,19 @@ import com.kata.rover.service.RoverService;
  */
 @ExtendWith(MockitoExtension.class)
 public class MarsRoverProjectTest {
-	
+
 	/**
 	 * The mock {@link RoverService}
 	 */
 	@Mock
 	private RoverService mockRoverService;
-	
+
 	/**
 	 * The mock {@link EarthRoverCommunicationService}
 	 */
 	@Mock
 	private EarthRoverCommunicationService mockComService;
-	
+
 	/**
 	 * System.out
 	 */
@@ -52,8 +52,7 @@ public class MarsRoverProjectTest {
 	 * Captor to get what is System.out.
 	 */
 	private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-	
-	
+
 	/**
 	 * Initializes System.out.
 	 */
@@ -69,31 +68,43 @@ public class MarsRoverProjectTest {
 	public void tearDown() {
 		System.setOut(standardOut);
 	}
-	
+
 	/**
 	 * Tests launch method.
 	 */
 	@Test
-	void launch() {
-		int marsSize = 5;
+	void launch() throws ObstacleException {
+		int marsSize = 20;
 		Mockito.when(mockComService.askForMarsSize()).thenReturn(marsSize);
-		
-		Rover initalRover = new Rover(2,5, Direction.E);
-		Mockito.when(mockComService.askForRoverLocation(5)).thenReturn(initalRover);
+
+		Rover initalRover = new Rover(2, 5, Direction.E);
+		Mockito.when(mockComService.askForRoverLocation(marsSize)).thenReturn(initalRover);
 		List<Command> commands = Arrays.asList(Command.F, Command.F, Command.L, Command.R);
-		Mockito.when(mockComService.askForCommands()).thenReturn(commands).thenReturn(commands).thenReturn(null);
-		
-		Rover nextRover = new Rover(2,8, Direction.N);
+		Mockito.when(mockComService.askForCommands()).thenReturn(commands).thenReturn(commands).thenReturn(commands)
+				.thenReturn(null);
+
+		Rover nextRover = new Rover(2, 8, Direction.N);
 		Mockito.when(mockRoverService.moveRover(initalRover, commands, marsSize)).thenReturn(nextRover);
-		
-		Rover finalRover = new Rover(5,8, Direction.S);
-		Mockito.when(mockRoverService.moveRover(nextRover, commands, marsSize)).thenReturn(finalRover);
-		
+
+		Rover obstacleRover = new Rover(3, 8, Direction.E);
+		Mockito.when(mockRoverService.moveRover(nextRover, commands, marsSize))
+				.thenThrow(new ObstacleException(obstacleRover, 4, 8));
+
+		Rover finalRover = new Rover(5, 8, Direction.S);
+		Mockito.when(mockRoverService.moveRover(obstacleRover, commands, marsSize)).thenReturn(finalRover);
+
 		MarsRoverProject.launch(mockRoverService, mockComService);
-		
-		assertTrue(outputStreamCaptor.toString().contains("Rover location is x: 2, y: 5 facing: EAST"), "The output should contain the message of the first rover.");
-		assertTrue(outputStreamCaptor.toString().contains("Rover location is x: 2, y: 8 facing: NORTH"), "The output should contain the message of the second rover.");
-		assertTrue(outputStreamCaptor.toString().contains("Rover location is x: 5, y: 8 facing: SOUTH"), "The output should contain the message of the last rover.");
+
+		assertTrue(outputStreamCaptor.toString().contains("Rover location is x: 2, y: 5 facing: EAST"),
+				"The output should contain the message of the first rover.");
+		assertTrue(outputStreamCaptor.toString().contains("Rover location is x: 2, y: 8 facing: NORTH"),
+				"The output should contain the message of the second rover.");
+		assertTrue(outputStreamCaptor.toString().contains("An obtascle was fount at x: 4, y:8"),
+				"The output should contain the error message.");
+		assertTrue(outputStreamCaptor.toString().contains("Rover location is x: 3, y: 8 facing: EAST"),
+				"The output should contain the message of the obstacle rover.");
+		assertTrue(outputStreamCaptor.toString().contains("Rover location is x: 5, y: 8 facing: SOUTH"),
+				"The output should contain the message of the last rover.");
 
 	}
 }

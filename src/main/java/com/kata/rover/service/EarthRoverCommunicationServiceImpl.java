@@ -26,6 +26,7 @@ public class EarthRoverCommunicationServiceImpl implements EarthRoverCommunicati
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param scanner The scanner to read user answers.
 	 */
 	public EarthRoverCommunicationServiceImpl(Scanner scanner) {
@@ -36,10 +37,10 @@ public class EarthRoverCommunicationServiceImpl implements EarthRoverCommunicati
 	public List<Command> askForCommands() {
 		System.out.println("Enter commands (f b l r) or exit :");
 		String stringCommands = getScanner().next();
-		
+
 		String cleanStringCommands = StringUtils.deleteWhitespace(stringCommands).toUpperCase();
-	
-		if(StringUtils.isEmpty(cleanStringCommands) || cleanStringCommands.equals("EXIT")) {
+
+		if (StringUtils.isEmpty(cleanStringCommands) || cleanStringCommands.equals("EXIT")) {
 			return null;
 		} else {
 			return convertCommands(stringCommands);
@@ -48,6 +49,7 @@ public class EarthRoverCommunicationServiceImpl implements EarthRoverCommunicati
 
 	/**
 	 * Converts a String of command into a list of commands.
+	 * 
 	 * @param stringCommands The commands to convert.
 	 * @return The commands.
 	 */
@@ -81,25 +83,26 @@ public class EarthRoverCommunicationServiceImpl implements EarthRoverCommunicati
 
 		return new Rover(x, y, direction);
 	}
-	
+
 	@Override
 	public int askForMarsSize() {
 		int marsSize = 0;
-		while(marsSize == 0) {
+		while (marsSize <= 0) {
 			marsSize = getIntFromConsole("Enter Mars Size (integer > 0): ");
 		}
 		return marsSize;
 	}
-	
+
 	/**
 	 * Get the coordinate according to Mars Size.
-	 * @param message The message directive for the user.
+	 * 
+	 * @param message  The message directive for the user.
 	 * @param marsSize Mars Size
 	 * @return The coordinate.
 	 */
 	private int getCoordinateFromConsole(String message, int marsSize) {
 		int coo = getIntFromConsole(message);
-		while(coo >= marsSize) {
+		while (coo >= marsSize) {
 			coo = getCoordinateFromConsole(message, marsSize);
 		}
 		return coo;

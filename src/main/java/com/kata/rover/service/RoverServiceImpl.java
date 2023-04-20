@@ -2,6 +2,7 @@ package com.kata.rover.service;
 
 import java.util.List;
 
+import com.kata.rover.exception.ObstacleException;
 import com.kata.rover.model.Command;
 import com.kata.rover.model.Direction;
 import com.kata.rover.model.Rover;
@@ -15,24 +16,43 @@ import com.kata.rover.model.Rover;
 public class RoverServiceImpl implements RoverService {
 
 	/**
+	 * The Map Service.
+	 */
+	private MapService mapService;
+
+	public RoverServiceImpl(MapService mapService) {
+		this.mapService = mapService;
+	}
+
+	/**
 	 * Move the {@link Rover} forward. That is to say, move the rover in the
 	 * direction it is facing.
 	 * 
 	 * @param roverToMove The rover to move.
 	 * @param marsSize    The size of Mars.
 	 * @return The rover moved.
+	 * @throws ObstacleException If an obstacle is found.
 	 */
-	Rover moveForward(Rover roverToMove, int marsSize) {
+	Rover moveForward(Rover roverToMove, int marsSize) throws ObstacleException {
 		Rover roverMoved = new Rover(roverToMove);
+
+		int x = roverToMove.getX();
+		int y = roverToMove.getY();
 
 		// Move rover on y or x axis according to facing direction
 		switch (roverToMove.getDirection()) {
-		case N -> roverMoved.setY(decrementCoordinate(roverMoved.getY(), marsSize));
-		case W -> roverMoved.setX(decrementCoordinate(roverMoved.getX(), marsSize));
-		case S -> roverMoved.setY(incrementCoordinate(roverMoved.getY(), marsSize));
-		case E -> roverMoved.setX(incrementCoordinate(roverMoved.getX(), marsSize));
+		case N -> y = decrementCoordinate(y, marsSize);
+		case W -> x = decrementCoordinate(x, marsSize);
+		case S -> y = incrementCoordinate(y, marsSize);
+		case E -> x = incrementCoordinate(x, marsSize);
 		}
 
+		if (mapService.hasObstacle(x, y)) {
+			throw new ObstacleException(roverToMove, x, y);
+		}
+
+		roverMoved.setY(y);
+		roverMoved.setX(x);
 		return roverMoved;
 	}
 
@@ -43,18 +63,28 @@ public class RoverServiceImpl implements RoverService {
 	 * @param roverToMove The rover to move.
 	 * @param marsSize    The size of Mars.
 	 * @return The rover moved.
+	 * @throws ObstacleException If an obstacle is found.
 	 */
-	Rover moveBackward(Rover roverToMove, int marsSize) {
+	Rover moveBackward(Rover roverToMove, int marsSize) throws ObstacleException {
 		Rover roverMoved = new Rover(roverToMove);
+
+		int x = roverToMove.getX();
+		int y = roverToMove.getY();
 
 		// Move rover on y or x axis according to facing direction
 		switch (roverToMove.getDirection()) {
-		case N -> roverMoved.setY(incrementCoordinate(roverMoved.getY(), marsSize));
-		case W -> roverMoved.setX(incrementCoordinate(roverMoved.getX(), marsSize));
-		case S -> roverMoved.setY(decrementCoordinate(roverMoved.getY(), marsSize));
-		case E -> roverMoved.setX(decrementCoordinate(roverMoved.getX(), marsSize));
+		case N -> y = incrementCoordinate(y, marsSize);
+		case W -> x = incrementCoordinate(x, marsSize);
+		case S -> y = decrementCoordinate(y, marsSize);
+		case E -> x = decrementCoordinate(x, marsSize);
 		}
 
+		if (mapService.hasObstacle(x, y)) {
+			throw new ObstacleException(roverToMove, x, y);
+		}
+
+		roverMoved.setY(y);
+		roverMoved.setX(x);
 		return roverMoved;
 	}
 
@@ -130,16 +160,8 @@ public class RoverServiceImpl implements RoverService {
 		return roverMoved;
 	}
 
-	/**
-	 * Move the {@link Rover} accoridng to the given commands.
-	 * 
-	 * @param roverToMove The rover to move.
-	 * @param commands    The commands to follow.
-	 * @param marsSize    The size of Mars.
-	 * @return The rover moved.
-	 */
 	@Override
-	public Rover moveRover(Rover roverToMove, List<Command> commands, int marsSize) {
+	public Rover moveRover(Rover roverToMove, List<Command> commands, int marsSize) throws ObstacleException {
 		Rover roverMoved = new Rover(roverToMove);
 
 		for (Command command : commands) {

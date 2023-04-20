@@ -83,15 +83,15 @@ public class EarthRoverCommunicationServiceImplTest {
 		assertEquals(4, rover.getY(), "Y coordinate should be equal");
 		assertEquals(Direction.E, rover.getDirection(), "Direction should be equal");
 	}
-	
-	
+
 	/**
 	 * Tests initRover method when the mars rover is not on the map.
 	 */
 	@Test
 	void initRover_notOnMap() {
 
-		Mockito.when(mockScanner.next()).thenReturn("5").thenReturn("1").thenReturn("6").thenReturn("2").thenReturn("E");
+		Mockito.when(mockScanner.next()).thenReturn("5").thenReturn("1").thenReturn("6").thenReturn("2")
+				.thenReturn("E");
 		Rover rover = comServiceToTest.askForRoverLocation(3);
 
 		assertTrue(outputStreamCaptor.toString().contains("Enter x:"), "Console out should display 'Enter x:'");
@@ -186,7 +186,7 @@ public class EarthRoverCommunicationServiceImplTest {
 
 		assertEquals(5, marsSize, "Size should be equal");
 	}
-	
+
 	/**
 	 * Tests askForMarsSize when no int is given.
 	 */
@@ -198,7 +198,7 @@ public class EarthRoverCommunicationServiceImplTest {
 
 		assertEquals(2, marsSize, "Size should be equal");
 	}
-	
+
 	/**
 	 * Tests askForMarsSize when 0 is given.
 	 */
