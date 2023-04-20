@@ -5,8 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.kata.rover.model.Command;
 import com.kata.rover.model.Direction;
@@ -27,8 +31,8 @@ public class RoverServiceImplTest {
 	@Test
 	void moveForward_facingEast_stepOverEdge() {
 		RoverServiceImpl serviceToTest = new RoverServiceImpl();
-		Rover roverToMove = new Rover(5, 2, Direction.E);
-		Rover expectedRover = new Rover(1, 2, Direction.E);
+		Rover roverToMove = new Rover(4, 2, Direction.E);
+		Rover expectedRover = new Rover(0, 2, Direction.E);
 
 		Rover roverMoved = serviceToTest.moveForward(roverToMove, 5);
 
@@ -41,8 +45,8 @@ public class RoverServiceImplTest {
 	@Test
 	void moveBackward_facingSouth_stepOverEdge() {
 		RoverServiceImpl serviceToTest = new RoverServiceImpl();
-		Rover roverToMove = new Rover(4, 1, Direction.S);
-		Rover expectedRover = new Rover(4, 5, Direction.S);
+		Rover roverToMove = new Rover(4, 0, Direction.S);
+		Rover expectedRover = new Rover(4, 4, Direction.S);
 
 		Rover roverMoved = serviceToTest.moveBackward(roverToMove, 5);
 
@@ -325,12 +329,28 @@ public class RoverServiceImplTest {
 	@Test
 	void moveRover_severalCommands_edgesJumps() {
 		RoverServiceImpl serviceToTest = new RoverServiceImpl();
-		Rover roverToMove = new Rover(3, 2, Direction.E);
-		Rover expectedRover = new Rover(2, 3, Direction.N);
+		Rover roverToMove = new Rover(2, 1, Direction.E);
+		Rover expectedRover = new Rover(1, 2, Direction.N);
 		List<Command> commands = Arrays.asList(Command.F, Command.R, Command.B, Command.B, Command.L, Command.F,
 				Command.L);
 
 		Rover roverMoved = serviceToTest.moveRover(roverToMove, commands,3);
+
+		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
+	}
+
+	/**
+	 * Tests moveRover method with several commands with edges jumps when the size is 1.
+	 */
+	@Test
+	void moveRover_severalCommands_edgesJumps_size1() {
+		RoverServiceImpl serviceToTest = new RoverServiceImpl();
+		Rover roverToMove = new Rover(0, 0, Direction.E);
+		Rover expectedRover = new Rover(0, 0, Direction.N);
+		List<Command> commands = Arrays.asList(Command.F, Command.R, Command.B, Command.B, Command.L, Command.F,
+				Command.L);
+
+		Rover roverMoved = serviceToTest.moveRover(roverToMove, commands,1);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}

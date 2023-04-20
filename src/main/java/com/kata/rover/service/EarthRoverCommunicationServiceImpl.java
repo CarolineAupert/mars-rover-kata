@@ -69,12 +69,12 @@ public class EarthRoverCommunicationServiceImpl implements EarthRoverCommunicati
 	}
 
 	@Override
-	public Rover askForRoverLocation() {
+	public Rover askForRoverLocation(int marsSize) {
 		// Get x coordinate
-		int x = getIntFromConsole("Enter x:");
+		int x = getCoordinateFromConsole("Enter x:", marsSize);
 
 		// Get y coordinate
-		int y = getIntFromConsole("Enter y:");
+		int y = getCoordinateFromConsole("Enter y:", marsSize);
 
 		// Get Direction
 		Direction direction = getDirectionFromConsole("Enter direction (N,E,W,S):");
@@ -84,7 +84,25 @@ public class EarthRoverCommunicationServiceImpl implements EarthRoverCommunicati
 	
 	@Override
 	public int askForMarsSize() {
-		return getIntFromConsole("Enter Mars Size (integer): ");
+		int marsSize = 0;
+		while(marsSize == 0) {
+			marsSize = getIntFromConsole("Enter Mars Size (integer > 0): ");
+		}
+		return marsSize;
+	}
+	
+	/**
+	 * Get the coordinate according to Mars Size.
+	 * @param message The message directive for the user.
+	 * @param marsSize Mars Size
+	 * @return The coordinate.
+	 */
+	private int getCoordinateFromConsole(String message, int marsSize) {
+		int coo = getIntFromConsole(message);
+		while(coo >= marsSize) {
+			coo = getCoordinateFromConsole(message, marsSize);
+		}
+		return coo;
 	}
 
 	/**

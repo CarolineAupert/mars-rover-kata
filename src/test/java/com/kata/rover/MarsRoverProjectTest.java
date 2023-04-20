@@ -79,7 +79,7 @@ public class MarsRoverProjectTest {
 		Mockito.when(mockComService.askForMarsSize()).thenReturn(marsSize);
 		
 		Rover initalRover = new Rover(2,5, Direction.E);
-		Mockito.when(mockComService.askForRoverLocation()).thenReturn(initalRover);
+		Mockito.when(mockComService.askForRoverLocation(5)).thenReturn(initalRover);
 		List<Command> commands = Arrays.asList(Command.F, Command.F, Command.L, Command.R);
 		Mockito.when(mockComService.askForCommands()).thenReturn(commands).thenReturn(commands).thenReturn(null);
 		

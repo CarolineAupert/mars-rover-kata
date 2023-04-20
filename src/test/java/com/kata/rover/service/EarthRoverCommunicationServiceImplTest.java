@@ -75,12 +75,29 @@ public class EarthRoverCommunicationServiceImplTest {
 	void initRover_ok() {
 
 		Mockito.when(mockScanner.next()).thenReturn("2").thenReturn("4").thenReturn("E");
-		Rover rover = comServiceToTest.askForRoverLocation();
+		Rover rover = comServiceToTest.askForRoverLocation(5);
 
 		assertTrue(outputStreamCaptor.toString().contains("Enter x:"), "Console out should display 'Enter x:'");
 		assertTrue(outputStreamCaptor.toString().contains("Enter y:"), "Console out should display 'Enter y:'");
 		assertEquals(2, rover.getX(), "X coordinate should be equal");
 		assertEquals(4, rover.getY(), "Y coordinate should be equal");
+		assertEquals(Direction.E, rover.getDirection(), "Direction should be equal");
+	}
+	
+	
+	/**
+	 * Tests initRover method when the mars rover is not on the map.
+	 */
+	@Test
+	void initRover_notOnMap() {
+
+		Mockito.when(mockScanner.next()).thenReturn("5").thenReturn("1").thenReturn("6").thenReturn("2").thenReturn("E");
+		Rover rover = comServiceToTest.askForRoverLocation(3);
+
+		assertTrue(outputStreamCaptor.toString().contains("Enter x:"), "Console out should display 'Enter x:'");
+		assertTrue(outputStreamCaptor.toString().contains("Enter y:"), "Console out should display 'Enter y:'");
+		assertEquals(1, rover.getX(), "X coordinate should be equal");
+		assertEquals(2, rover.getY(), "Y coordinate should be equal");
 		assertEquals(Direction.E, rover.getDirection(), "Direction should be equal");
 	}
 
@@ -91,7 +108,7 @@ public class EarthRoverCommunicationServiceImplTest {
 	void initRover_wrongParams_notAnInt() {
 		Mockito.when(mockScanner.next()).thenReturn("a").thenReturn("2").thenReturn("3").thenReturn("E");
 
-		Rover rover = comServiceToTest.askForRoverLocation();
+		Rover rover = comServiceToTest.askForRoverLocation(5);
 
 		assertTrue(outputStreamCaptor.toString().contains("Enter x:"), "Console out should display 'Enter x:'");
 		assertEquals(2, rover.getX(), "X coordinate should be equal");
@@ -106,7 +123,7 @@ public class EarthRoverCommunicationServiceImplTest {
 		Mockito.when(mockScanner.next()).thenReturn("2").thenReturn("3").thenReturn("5").thenReturn("N");
 		;
 
-		Rover rover = comServiceToTest.askForRoverLocation();
+		Rover rover = comServiceToTest.askForRoverLocation(5);
 
 		assertTrue(outputStreamCaptor.toString().contains("Enter x:"), "Console out should display 'Enter x:'");
 		assertEquals(2, rover.getX(), "X coordinate should be equal");
@@ -122,7 +139,7 @@ public class EarthRoverCommunicationServiceImplTest {
 	void initRover_wrongDirection_notADirection() {
 		Mockito.when(mockScanner.next()).thenReturn("2").thenReturn("3").thenReturn("Z").thenReturn("E");
 
-		Rover rover = comServiceToTest.askForRoverLocation();
+		Rover rover = comServiceToTest.askForRoverLocation(5);
 
 		assertTrue(outputStreamCaptor.toString().contains("Enter x:"), "Console out should display 'Enter x:'");
 		assertEquals(2, rover.getX(), "X coordinate should be equal");
@@ -176,6 +193,18 @@ public class EarthRoverCommunicationServiceImplTest {
 	@Test
 	void askForMarsSize_ko() {
 		Mockito.when(mockScanner.next()).thenReturn("h").thenReturn("2");
+
+		int marsSize = comServiceToTest.askForMarsSize();
+
+		assertEquals(2, marsSize, "Size should be equal");
+	}
+	
+	/**
+	 * Tests askForMarsSize when 0 is given.
+	 */
+	@Test
+	void askForMarsSize_0() {
+		Mockito.when(mockScanner.next()).thenReturn("0").thenReturn("2");
 
 		int marsSize = comServiceToTest.askForMarsSize();
 

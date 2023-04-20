@@ -38,7 +38,7 @@ public class MarsRoverProject {
 	static void launch(RoverService roverService, EarthRoverCommunicationService comService) {
 		System.out.println("Welcome on Mars. Please initiate Rover coordinates.");
 		int marsSize = comService.askForMarsSize();
-		Rover rover = comService.askForRoverLocation();
+		Rover rover = comService.askForRoverLocation(marsSize);
 		System.out.println(rover);
 		
 		List<Command> commands = comService.askForCommands();

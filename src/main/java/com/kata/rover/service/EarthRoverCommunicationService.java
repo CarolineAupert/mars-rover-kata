@@ -23,9 +23,10 @@ public interface EarthRoverCommunicationService {
 	/**
 	 * Asks for the Rover location.
 	 * 
+	 * @param marsSize Mars Size
 	 * @return  The Rover.
 	 */
-	public Rover askForRoverLocation();
+	public Rover askForRoverLocation(int marsSize);
 	
 	/**
 	 * Ask for Mars size..
