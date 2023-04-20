@@ -17,8 +17,9 @@ public interface RoverService {
 	 * Move the {@link Rover} accoridng to the given commands.
 	 * @param roverToMove The rover to move.
 	 * @param commands The commands to follow.
+	 * @param marsSize The size of Mars.
 	 * @return The rover moved.
 	 */
-	public Rover moveRover(Rover roverToMove, List<Command> commands);
+	public Rover moveRover(Rover roverToMove, List<Command> commands, int marsSize);
 
 }

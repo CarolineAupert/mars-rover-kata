@@ -20,6 +20,35 @@ import com.kata.rover.model.Rover;
  */
 public class RoverServiceImplTest {
 
+	
+	/**
+	 * Tests moveForward method facing East when the rover is at the edge.
+	 */
+	@Test
+	void moveForward_facingEast_stepOverEdge() {
+		RoverServiceImpl serviceToTest = new RoverServiceImpl();
+		Rover roverToMove = new Rover(5, 2, Direction.E);
+		Rover expectedRover = new Rover(1, 2, Direction.E);
+
+		Rover roverMoved = serviceToTest.moveForward(roverToMove, 5);
+
+		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
+	}
+	
+	/**
+	 * Tests moveForward method facing North when the rover is at the edge.
+	 */
+	@Test
+	void moveBackward_facingSouth_stepOverEdge() {
+		RoverServiceImpl serviceToTest = new RoverServiceImpl();
+		Rover roverToMove = new Rover(4, 1, Direction.S);
+		Rover expectedRover = new Rover(4, 5, Direction.S);
+
+		Rover roverMoved = serviceToTest.moveBackward(roverToMove, 5);
+
+		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
+	}
+	
 	/**
 	 * Tests moveForward method facing North.
 	 */
@@ -29,7 +58,7 @@ public class RoverServiceImplTest {
 		Rover roverToMove = new Rover(1, 2, Direction.N);
 		Rover expectedRover = new Rover(1, 1, Direction.N);
 
-		Rover roverMoved = serviceToTest.moveForward(roverToMove);
+		Rover roverMoved = serviceToTest.moveForward(roverToMove,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -43,7 +72,7 @@ public class RoverServiceImplTest {
 		Rover roverToMove = new Rover(1, 2, Direction.S);
 		Rover expectedRover = new Rover(1, 3, Direction.S);
 
-		Rover roverMoved = serviceToTest.moveForward(roverToMove);
+		Rover roverMoved = serviceToTest.moveForward(roverToMove,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -57,7 +86,7 @@ public class RoverServiceImplTest {
 		Rover roverToMove = new Rover(1, 2, Direction.E);
 		Rover expectedRover = new Rover(2, 2, Direction.E);
 
-		Rover roverMoved = serviceToTest.moveForward(roverToMove);
+		Rover roverMoved = serviceToTest.moveForward(roverToMove,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -71,7 +100,7 @@ public class RoverServiceImplTest {
 		Rover roverToMove = new Rover(3, 2, Direction.W);
 		Rover expectedRover = new Rover(2, 2, Direction.W);
 
-		Rover roverMoved = serviceToTest.moveForward(roverToMove);
+		Rover roverMoved = serviceToTest.moveForward(roverToMove,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -85,7 +114,7 @@ public class RoverServiceImplTest {
 		Rover roverToMove = new Rover(3, 2, Direction.N);
 		Rover expectedRover = new Rover(3, 3, Direction.N);
 
-		Rover roverMoved = serviceToTest.moveBackward(roverToMove);
+		Rover roverMoved = serviceToTest.moveBackward(roverToMove,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -99,7 +128,7 @@ public class RoverServiceImplTest {
 		Rover roverToMove = new Rover(3, 2, Direction.S);
 		Rover expectedRover = new Rover(3, 1, Direction.S);
 
-		Rover roverMoved = serviceToTest.moveBackward(roverToMove);
+		Rover roverMoved = serviceToTest.moveBackward(roverToMove,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -113,7 +142,7 @@ public class RoverServiceImplTest {
 		Rover roverToMove = new Rover(3, 2, Direction.W);
 		Rover expectedRover = new Rover(4, 2, Direction.W);
 
-		Rover roverMoved = serviceToTest.moveBackward(roverToMove);
+		Rover roverMoved = serviceToTest.moveBackward(roverToMove,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -127,7 +156,7 @@ public class RoverServiceImplTest {
 		Rover roverToMove = new Rover(3, 2, Direction.E);
 		Rover expectedRover = new Rover(2, 2, Direction.E);
 
-		Rover roverMoved = serviceToTest.moveBackward(roverToMove);
+		Rover roverMoved = serviceToTest.moveBackward(roverToMove,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -254,7 +283,7 @@ public class RoverServiceImplTest {
 		Rover expectedRover = new Rover(2, 2, Direction.W);
 		List<Command> commands = Arrays.asList(Command.F);
 
-		Rover roverMoved = serviceToTest.moveRover(roverToMove, commands);
+		Rover roverMoved = serviceToTest.moveRover(roverToMove, commands,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -269,7 +298,7 @@ public class RoverServiceImplTest {
 		Rover expectedRover = new Rover(3, 2, Direction.W);
 		List<Command> commands = new ArrayList<>();
 
-		Rover roverMoved = serviceToTest.moveRover(roverToMove, commands);
+		Rover roverMoved = serviceToTest.moveRover(roverToMove, commands,5);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}
@@ -285,7 +314,23 @@ public class RoverServiceImplTest {
 		List<Command> commands = Arrays.asList(Command.F, Command.F, Command.R, Command.F, Command.L, Command.B,
 				Command.R);
 
-		Rover roverMoved = serviceToTest.moveRover(roverToMove, commands);
+		Rover roverMoved = serviceToTest.moveRover(roverToMove, commands,5);
+
+		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
+	}
+	
+	/**
+	 * Tests moveRover method with several commands with edges jumps.
+	 */
+	@Test
+	void moveRover_severalCommands_edgesJumps() {
+		RoverServiceImpl serviceToTest = new RoverServiceImpl();
+		Rover roverToMove = new Rover(3, 2, Direction.E);
+		Rover expectedRover = new Rover(2, 3, Direction.N);
+		List<Command> commands = Arrays.asList(Command.F, Command.R, Command.B, Command.B, Command.L, Command.F,
+				Command.L);
+
+		Rover roverMoved = serviceToTest.moveRover(roverToMove, commands,3);
 
 		assertEquals(expectedRover, roverMoved, "The 2 rovers should be at the same location");
 	}

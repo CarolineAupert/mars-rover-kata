@@ -32,11 +32,7 @@ public class EarthRoverCommunicationServiceImpl implements EarthRoverCommunicati
 		this.scanner = scanner;
 	}
 
-	/**
-	 * Retrieve the commands given by the user.
-	 * 
-	 * @return The commands
-	 */
+	@Override
 	public List<Command> askForCommands() {
 		System.out.println("Enter commands (f b l r) or exit :");
 		String stringCommands = getScanner().next();
@@ -72,37 +68,37 @@ public class EarthRoverCommunicationServiceImpl implements EarthRoverCommunicati
 		return commands;
 	}
 
-	/**
-	 * Initializes the Rover position.
-	 * 
-	 * @param x The x coordinate.
-	 * @return A recp of the Rover position.
-	 */
+	@Override
 	public Rover askForRoverLocation() {
 		// Get x coordinate
-		int x = getCoordinateFromConsole("Enter x:");
+		int x = getIntFromConsole("Enter x:");
 
 		// Get y coordinate
-		int y = getCoordinateFromConsole("Enter y:");
+		int y = getIntFromConsole("Enter y:");
 
 		// Get Direction
 		Direction direction = getDirectionFromConsole("Enter direction (N,E,W,S):");
 
 		return new Rover(x, y, direction);
 	}
+	
+	@Override
+	public int askForMarsSize() {
+		return getIntFromConsole("Enter Mars Size (integer): ");
+	}
 
 	/**
-	 * Retrieve the int coordinate from the console.
+	 * Retrieve int value from the console.
 	 * 
 	 * @param message The message directive for the user.
-	 * @return The corresponding coordinate.
+	 * @return The corresponding int.
 	 */
-	private int getCoordinateFromConsole(String message) {
+	private int getIntFromConsole(String message) {
 		String StringCoordinate = getArgFromConsole(message);
 		try {
 			return Integer.valueOf(StringUtils.deleteWhitespace(StringCoordinate));
 		} catch (NumberFormatException e) {
-			return getCoordinateFromConsole(message);
+			return getIntFromConsole(message);
 		}
 	}
 

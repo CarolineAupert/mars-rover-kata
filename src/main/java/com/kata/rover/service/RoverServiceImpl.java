@@ -17,39 +17,71 @@ public class RoverServiceImpl implements RoverService {
 	/**
 	 * Move the {@link Rover} forward. That is to say, move the rover in the direction it is facing.
 	 * @param roverToMove The rover to move.
+	 * @param marsSize The size of Mars.
 	 * @return The rover moved.
 	 */
-	Rover moveForward(Rover roverToMove) {
+	Rover moveForward(Rover roverToMove, int marsSize) {
 		Rover roverMoved = new Rover(roverToMove);
 		
 		// Move rover on y or x axis according to facing direction
 		switch (roverToMove.getDirection()) {
-			case N -> roverMoved.setY(roverMoved.getY()-1);
-			case W -> roverMoved.setX(roverMoved.getX()-1);
-			case S -> roverMoved.setY(roverMoved.getY()+1);
-			case E -> roverMoved.setX(roverMoved.getX()+1);
+			case N -> roverMoved.setY(decrementCoordinate(roverMoved.getY(), marsSize));
+			case W -> roverMoved.setX(decrementCoordinate(roverMoved.getX(), marsSize));
+			case S -> roverMoved.setY(incrementCoordinate(roverMoved.getY(), marsSize));
+			case E -> roverMoved.setX(incrementCoordinate(roverMoved.getX(), marsSize));
+		}
+		
+		return roverMoved;
+	}
+	
+	
+	
+	/**
+	 * Move the {@link Rover} backward. That is to say, move the rover in the direction it is facing.
+	 * @param roverToMove The rover to move.
+	 * @param marsSize The size of Mars.
+	 * @return The rover moved.
+	 */
+	Rover moveBackward(Rover roverToMove, int marsSize) {
+		Rover roverMoved = new Rover(roverToMove);
+		
+		// Move rover on y or x axis according to facing direction
+		switch (roverToMove.getDirection()) {
+			case N -> roverMoved.setY(incrementCoordinate(roverMoved.getY(), marsSize));
+			case W -> roverMoved.setX(incrementCoordinate(roverMoved.getX(), marsSize));
+			case S -> roverMoved.setY(decrementCoordinate(roverMoved.getY(), marsSize));
+			case E -> roverMoved.setX(decrementCoordinate(roverMoved.getX(), marsSize));
 		}
 		
 		return roverMoved;
 	}
 	
 	/**
-	 * Move the {@link Rover} backward. That is to say, move the rover in the direction it is facing.
-	 * @param roverToMove The rover to move.
-	 * @return The rover moved.
+	 * Manage coordinate incrementation according to planet size for managing edges.
+	 * @param coordinate The coordinate to increment.
+	 * @param size The plante size.
+	 * @return The new coordinate.
 	 */
-	Rover moveBackward(Rover roverToMove) {
-		Rover roverMoved = new Rover(roverToMove);
-		
-		// Move rover on y or x axis according to facing direction
-		switch (roverToMove.getDirection()) {
-			case N -> roverMoved.setY(roverMoved.getY()+1);
-			case W -> roverMoved.setX(roverMoved.getX()+1);
-			case S -> roverMoved.setY(roverMoved.getY()-1);
-			case E -> roverMoved.setX(roverMoved.getX()- 1);
+	private int incrementCoordinate(int coordinate, int size) {
+		if(coordinate == size) {
+			return 1;
+		} else {
+			return coordinate + 1;
 		}
-		
-		return roverMoved;
+	}
+	
+	/**
+	 * Manage coordinate decrementation according to planet size for managing edges.
+	 * @param coordinate The coordinate to decrement.
+	 * @param size The plante size.
+	 * @return The new coordinate.
+	 */
+	private int decrementCoordinate(int coordinate, int size) {
+		if(coordinate == 1) {
+			return size;
+		} else {
+			return coordinate - 1;
+		}
 	}
 	
 	/**
@@ -96,15 +128,17 @@ public class RoverServiceImpl implements RoverService {
 	 * Move the {@link Rover} accoridng to the given commands.
 	 * @param roverToMove The rover to move.
 	 * @param commands The commands to follow.
+	 * @param marsSize The size of Mars.
 	 * @return The rover moved.
 	 */
-	public Rover moveRover(Rover roverToMove, List<Command> commands) {
+	@Override
+	public Rover moveRover(Rover roverToMove, List<Command> commands, int marsSize) {
 		Rover roverMoved = new Rover(roverToMove);
 		
 		for(Command command : commands) {
 			switch (command) {
-				case F -> roverMoved = moveForward(roverMoved);
-				case B -> roverMoved = moveBackward(roverMoved);
+				case F -> roverMoved = moveForward(roverMoved, marsSize);
+				case B -> roverMoved = moveBackward(roverMoved, marsSize);
 				case L -> roverMoved = turnLeft(roverMoved);
 				case R -> roverMoved = turnRight(roverMoved);
 			}

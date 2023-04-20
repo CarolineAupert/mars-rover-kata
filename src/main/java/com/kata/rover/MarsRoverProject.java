@@ -37,12 +37,13 @@ public class MarsRoverProject {
 	 */
 	static void launch(RoverService roverService, EarthRoverCommunicationService comService) {
 		System.out.println("Welcome on Mars. Please initiate Rover coordinates.");
+		int marsSize = comService.askForMarsSize();
 		Rover rover = comService.askForRoverLocation();
 		System.out.println(rover);
 		
 		List<Command> commands = comService.askForCommands();
 		while(commands != null) {
-			rover = roverService.moveRover(rover, commands);
+			rover = roverService.moveRover(rover, commands, marsSize);
 			System.out.println(rover);
 			commands = comService.askForCommands();
 		}

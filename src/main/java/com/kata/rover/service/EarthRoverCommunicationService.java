@@ -21,11 +21,17 @@ public interface EarthRoverCommunicationService {
 	public List<Command> askForCommands();
 
 	/**
-	 * Initializes the Rover position.
+	 * Asks for the Rover location.
 	 * 
-	 * @param x The x coordinate.
-	 * @return A recp of the Rover position.
+	 * @return  The Rover.
 	 */
 	public Rover askForRoverLocation();
+	
+	/**
+	 * Ask for Mars size..
+	 * 
+	 * @return Mars size.
+	 */
+	public int askForMarsSize();
 
 }

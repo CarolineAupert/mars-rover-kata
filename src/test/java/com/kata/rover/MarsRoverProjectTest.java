@@ -75,6 +75,8 @@ public class MarsRoverProjectTest {
 	 */
 	@Test
 	void launch() {
+		int marsSize = 5;
+		Mockito.when(mockComService.askForMarsSize()).thenReturn(marsSize);
 		
 		Rover initalRover = new Rover(2,5, Direction.E);
 		Mockito.when(mockComService.askForRoverLocation()).thenReturn(initalRover);
@@ -82,10 +84,10 @@ public class MarsRoverProjectTest {
 		Mockito.when(mockComService.askForCommands()).thenReturn(commands).thenReturn(commands).thenReturn(null);
 		
 		Rover nextRover = new Rover(2,8, Direction.N);
-		Mockito.when(mockRoverService.moveRover(initalRover, commands)).thenReturn(nextRover);
+		Mockito.when(mockRoverService.moveRover(initalRover, commands, marsSize)).thenReturn(nextRover);
 		
 		Rover finalRover = new Rover(5,8, Direction.S);
-		Mockito.when(mockRoverService.moveRover(nextRover, commands)).thenReturn(finalRover);
+		Mockito.when(mockRoverService.moveRover(nextRover, commands, marsSize)).thenReturn(finalRover);
 		
 		MarsRoverProject.launch(mockRoverService, mockComService);
 		

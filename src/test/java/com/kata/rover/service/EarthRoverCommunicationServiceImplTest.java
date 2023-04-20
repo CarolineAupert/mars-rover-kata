@@ -145,7 +145,7 @@ public class EarthRoverCommunicationServiceImplTest {
 	}
 
 	/**
-	 * Tests initRover method when wrong commands are given.
+	 * Tests getCommands method when wrong commands are given.
 	 */
 	@Test
 	void getCommands_ko() {
@@ -158,4 +158,27 @@ public class EarthRoverCommunicationServiceImplTest {
 		assertEquals(expectedCommands, commands, "Commands should be equal");
 	}
 
+	/**
+	 * Tests askForMarsSize method.
+	 */
+	@Test
+	void askForMarsSize_ok() {
+		Mockito.when(mockScanner.next()).thenReturn("5");
+
+		int marsSize = comServiceToTest.askForMarsSize();
+
+		assertEquals(5, marsSize, "Size should be equal");
+	}
+	
+	/**
+	 * Tests askForMarsSize when no int is given.
+	 */
+	@Test
+	void askForMarsSize_ko() {
+		Mockito.when(mockScanner.next()).thenReturn("h").thenReturn("2");
+
+		int marsSize = comServiceToTest.askForMarsSize();
+
+		assertEquals(2, marsSize, "Size should be equal");
+	}
 }
