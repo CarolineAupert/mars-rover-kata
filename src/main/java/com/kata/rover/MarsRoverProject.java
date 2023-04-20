@@ -3,7 +3,7 @@ package com.kata.rover;
 import java.util.Scanner;
 
 import com.kata.rover.model.Rover;
-import com.kata.rover.service.EarthRoverCommunicationService;
+import com.kata.rover.service.EarthRoverCommunicationServiceImpl;
 
 /**
  * This is the main class of the project.
@@ -20,7 +20,7 @@ public class MarsRoverProject {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Welcome on Mars. Please initiate Rover coordinates.");
-		EarthRoverCommunicationService comService = new EarthRoverCommunicationService(new Scanner(System.in));
+		EarthRoverCommunicationServiceImpl comService = new EarthRoverCommunicationServiceImpl(new Scanner(System.in));
 		Rover rover = comService.askForRoverLocation();
 		System.out.println(rover);
 	}
